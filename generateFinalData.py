@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # Generating a final dataframe contaning last telemetries with timestamps
-def generateFinalData(numOfValues):
+def generate(numOfValues):
     dfURLs = generateURLDataFrame(numOfValues)
     df = pd.DataFrame()
 
@@ -20,11 +20,9 @@ def generateFinalData(numOfValues):
     df.reset_index(inplace=True)
     df.drop("index", axis=1, inplace=True)
     df.to_csv("generatedCSVs/GeneratedData.csv", encoding='utf-8')
+    return df
 
 
-if __name__ == "__main__":
+def generateFinalData():
     values_wanted = int(input("how many values do you want to get?: \n"))
-    generateFinalData(values_wanted)
-
-    # TODO need to write a function that takes a df and create json from it
-    # then it import requests and creates a post request to the influxdb container port
+    return generate(values_wanted)
