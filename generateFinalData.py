@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # Generating a final dataframe contaning last telemetries with timestamps
-def generate(numOfValues):
+def generateFinalData(numOfValues):
     dfURLs = generateURLDataFrame(numOfValues)
     df = pd.DataFrame()
 
@@ -23,6 +23,6 @@ def generate(numOfValues):
     return df
 
 
-def generateFinalData():
+def generate():
     values_wanted = int(input("how many values do you want to get?: \n"))
-    return generate(values_wanted)
+    return generateFinalData(values_wanted)
