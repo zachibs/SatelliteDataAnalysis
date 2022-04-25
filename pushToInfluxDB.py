@@ -23,31 +23,20 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 query_api = client.query_api()
 bucket_api = client.buckets_api()
 
-
 # creating and deleting a new bucket
 bucket_api.create_bucket(bucket_name="check2")
 bucket_api.delete_bucket(bucket_api.find_bucket_by_name("check2"))
-
-# Experementing with queries and writes
-p = Point("my_measurement").tag(
-    "location", "Prague").field("temperature", 28.3)
-
-write_api.write(bucket="influx", record=p)
-
-result = query_api.query('from(bucket:"influx") |> range(start: -10m)')
-
-for table in result:
-    print(f"Table: {table} \n")
-    for record in table.records:
-        print(f"Row: {record.values} \n")
-
 
 # Writing dataframe data to the database
 # need more work on filtering what columns are fiters and what are values
 data = pd.read_csv("generatedCSVs/GeneratedData.csv")
 data.drop("Unnamed: 0", axis=1, inplace=True)
+min = 60000000000
+data["timestamp"] = data["timestamp"].apply(
+    lambda x: pd.to_datetime(x).value - min)
 data.set_index("timestamp", inplace=True)
+bucket_api.delete_bucket(bucket_api.find_bucket_by_name("dataframe"))
 bucket_api.create_bucket(bucket_name="dataframe")
 write_api.write("dataframe", record=data, data_frame_measurement_name="h2o_feet",
-                data_frame_tag_columns=["local_address"])
+                data_frame_tag_columns=["msg_index"])
 client.close()
