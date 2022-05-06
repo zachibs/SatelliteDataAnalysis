@@ -32,7 +32,7 @@ def push_to_db():
     bucket_api.delete_bucket(bucket_api.find_bucket_by_name("check2"))
 
     # generating the data
-    generate()
+    # generate()
     data = pd.read_csv("generatedCSVs/GeneratedData.csv")
     data.drop("Unnamed: 0", axis=1, inplace=True)
     three_hours_nanoseconds = 10800000000000
@@ -40,14 +40,17 @@ def push_to_db():
         lambda x: pd.to_datetime(x).value - three_hours_nanoseconds)
     data["battery_volts"] = data["battery_volts"].apply(
         lambda x: x/1000)
-    data.insert(1, "numindex", data.index)
+    first_row = data.iloc[0:1]  # capturing the latest telemetry
+    first_row.set_index("timestamp", inplace=True)
     data.set_index("timestamp", inplace=True)
 
     # Writing the data to the database
     bucket_api.delete_bucket(bucket_api.find_bucket_by_name("dataframe"))
     bucket_api.create_bucket(bucket_name="dataframe")
-    write_api.write("dataframe", record=data, data_frame_measurement_name="h2o_feet",
-                    data_frame_tag_columns=["numindex"])
+    write_api.write("dataframe", record=data, data_frame_measurement_name="continuos_data",
+                    data_frame_tag_columns=["msg_index"])
+    write_api.write("dataframe", record=first_row, data_frame_measurement_name="latest",
+                    data_frame_tag_columns=["msg_index"])
     client.close()
 
 
