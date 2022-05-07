@@ -20,7 +20,7 @@ def push_to_db():
     # Connect to influxdb using the credentials in the docker-compose file
     client = InfluxDBClient(url=IP, token="123456789", org="influx")
 
-    # creating api's for write and read:
+    # creating APIs:
     write_api = client.write_api(write_options=SYNCHRONOUS)
     delete_api = client.delete_api()
     query_api = client.query_api()
@@ -43,7 +43,7 @@ def push_to_db():
     first_row.set_index("timestamp", inplace=True)
     data.set_index("timestamp", inplace=True)
 
-    # deleting former last telemetry and writing the new latest
+    # deleting former lastest telemetry and writing the new latest
     start = "1970-01-01T00:00:00Z"
     stop = f"{datetime.now().date()}T23:59:00Z"
     delete_api.delete(start, stop, '_measurement="latest"', bucket="SATLLA-2B")
@@ -79,7 +79,3 @@ def push_to_db():
     #                 data_frame_tag_columns=["msg_index"])
 
     client.close()
-
-
-if __name__ == "__main__":
-    push_to_db()
