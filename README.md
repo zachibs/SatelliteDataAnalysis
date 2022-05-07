@@ -7,18 +7,17 @@ where everything is containerized as services using docker compose: first is inf
 
 **TODO List:**
 
-- TODO: create the dataframe_to_points function
-- TODO: write only the last row from the dataframe as a separate measurement to use in the gauge's (then drop the numindex column)
-- TODO: enhance the function that writes the data to influxdb
-  1. write only the delta's
-  2. figure out how to model the database in a way that it sees the data in a 'flow'
 - TODO: figure out how to pull long beacons data too and push it to influxdb
-- TODO: change in the push function, the way of generating the data to push. instead of from a csv file, use the generate method directly.
+- TODO: change inside the push function, the way of generating the data to push. instead of from a csv file, use the generate method directly.
 - TODO: create a function that calls the push function in set time intervals. (to keep the service alive)
+- TODO: create a requirements.txt file
+- TODO: create a docker image for 'scarping and pushing to database service'
 - TODO: create a dashboard on grafana
 - TODO: figure out how to create dashboard by code (import json model)
-- TODO: create a requirements.txt file
-- TODO: create a docker image for 'scarping writing to database service'
+
+**TODO's To Consider:**
+
+- TODO: create the dataframe_to_points function (in debate if should)
 
 **Visualization in grafana should look like:**
 

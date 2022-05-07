@@ -8,10 +8,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import socket
 import pandas as pd
 from generateFinalData import generate
-
-
-def dataframe_to_points(df):
-    pass
+from datetime import datetime
 
 
 def push_to_db():
@@ -19,11 +16,13 @@ def push_to_db():
     hostname = socket.gethostname()
     IP = f"{socket.gethostbyname(hostname)}:8086"
     print(IP)
+
     # Connect to influxdb using the credentials in the docker-compose file
     client = InfluxDBClient(url=IP, token="123456789", org="influx")
 
     # creating api's for write and read:
     write_api = client.write_api(write_options=SYNCHRONOUS)
+    delete_api = client.delete_api()
     query_api = client.query_api()
     bucket_api = client.buckets_api()
 
@@ -32,7 +31,7 @@ def push_to_db():
     bucket_api.delete_bucket(bucket_api.find_bucket_by_name("check2"))
 
     # generating the data
-    # generate()
+    generate()
     data = pd.read_csv("generatedCSVs/GeneratedData.csv")
     data.drop("Unnamed: 0", axis=1, inplace=True)
     three_hours_nanoseconds = 10800000000000
@@ -44,13 +43,41 @@ def push_to_db():
     first_row.set_index("timestamp", inplace=True)
     data.set_index("timestamp", inplace=True)
 
-    # Writing the data to the database
-    bucket_api.delete_bucket(bucket_api.find_bucket_by_name("dataframe"))
-    bucket_api.create_bucket(bucket_name="dataframe")
-    write_api.write("dataframe", record=data, data_frame_measurement_name="continuos_data",
+    # deleting former last telemetry and writing the new latest
+    start = "1970-01-01T00:00:00Z"
+    stop = f"{datetime.now().date()}T23:59:00Z"
+    delete_api.delete(start, stop, '_measurement="latest"', bucket="SATLLA-2B")
+    write_api.write("SATLLA-2B", record=first_row, data_frame_measurement_name="latest",
                     data_frame_tag_columns=["msg_index"])
-    write_api.write("dataframe", record=first_row, data_frame_measurement_name="latest",
-                    data_frame_tag_columns=["msg_index"])
+
+    # creating seprate dataframes for each field
+    battery_volts = data.drop(['local_address', 'sd_outbox', 'msg_type', 'msg_received',
+                               'msg_index', 'battery_current', 'sns_ntc1',
+                               'sns_ntc2'], axis=1, inplace=False)
+    battery_current = data.drop(['local_address', 'sd_outbox', 'msg_type', 'msg_received',
+                                 'msg_index', 'battery_volts', 'sns_ntc1',
+                                 'sns_ntc2'], axis=1, inplace=False)
+    sns_ntc1 = data.drop(['local_address', 'sd_outbox', 'msg_type', 'msg_received',
+                          'msg_index', 'battery_current', 'battery_volts',
+                          'sns_ntc2'], axis=1, inplace=False)
+    sns_ntc2 = data.drop(['local_address', 'sd_outbox', 'msg_type', 'msg_received',
+                          'msg_index', 'battery_current', 'sns_ntc1',
+                          "battery_volts"], axis=1, inplace=False)
+
+    # writing in seprate measurements:
+    write_api.write("SATLLA-2B", record=battery_volts,
+                    data_frame_measurement_name="battery_volts")
+    write_api.write("SATLLA-2B", record=battery_current,
+                    data_frame_measurement_name="battery_current")
+    write_api.write("SATLLA-2B", record=sns_ntc1,
+                    data_frame_measurement_name="sns_ntc1")
+    write_api.write("SATLLA-2B", record=sns_ntc2,
+                    data_frame_measurement_name="sns_ntc2")
+
+    # # Depreceatred -------- Writing the data to the database
+    # write_api.write("dataframe", record=data, data_frame_measurement_name="continuos_data",
+    #                 data_frame_tag_columns=["msg_index"])
+
     client.close()
 
 
