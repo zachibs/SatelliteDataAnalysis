@@ -13,8 +13,13 @@ from datetime import datetime
 
 def push_to_db():
     # Get local ip
-    hostname = socket.gethostname()
-    IP = f"{socket.gethostbyname(hostname)}:8086"
+
+    # when used outside the container
+    # hostname = socket.gethostname()
+    # IP = f"{socket.gethostbyname(hostname)}:8086"
+
+    # when used inside the container
+    IP = "http://influxdb:8086"
     print(IP)
 
     # Connect to influxdb using the credentials in the docker-compose file
@@ -27,14 +32,15 @@ def push_to_db():
     bucket_api = client.buckets_api()
 
     # creating and deleting a new bucket
-    bucket_api.create_bucket(bucket_name="check2")
-    bucket_api.delete_bucket(bucket_api.find_bucket_by_name("check2"))
+    # bucket_api.delete_bucket(bucket_api.find_bucket_by_name("SATLLA-2B"))
+    # bucket_api.create_bucket(bucket_name="SATLLA-2B")
 
     # generating the data
     generate()
     data = pd.read_csv("generatedCSVs/GeneratedData.csv")
     data.drop("Unnamed: 0", axis=1, inplace=True)
-    three_hours_nanoseconds = 10800000000000
+    # three_hours_nanoseconds = 10800000000000  # when used outside container
+    three_hours_nanoseconds = 0
     data["timestamp"] = data["timestamp"].apply(
         lambda x: pd.to_datetime(x).value - three_hours_nanoseconds)
     data["battery_volts"] = data["battery_volts"].apply(

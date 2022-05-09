@@ -32,6 +32,18 @@ services:
       - "3000:3000"
     volumes:
       - grafana:/var/lib/grafana
+    
+  scraping:
+    image: zachib/final_scraping_service
+    container_name: scraping-server
+    restart: always
+    depends_on:
+      - influxdb
+      - grafana
+    links:
+      - influxdb
+    ports:
+      - "9001:9001"
 
 volumes:
   influxdb:

@@ -9,9 +9,6 @@ where everything is containerized as services using docker compose: first is inf
 
 - TODO: figure out how to pull long beacons data too and push it to influxdb
 - TODO: change inside the push function, the way of generating the data to push. instead of from a csv file, use the generate method directly.
-- TODO: create a requirements.txt file
-- TODO: create a docker image for 'scarping and pushing to database service'
-- TODO: create a dashboard on grafana
 - TODO: figure out how to create dashboard by code (import json model)
 
 **TODO's To Consider:**

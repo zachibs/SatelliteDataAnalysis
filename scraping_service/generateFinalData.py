@@ -24,5 +24,4 @@ def generateFinalData(numOfValues):
 
 
 def generate():
-    # values_wanted = int(input("how many values do you want to get?: \n"))
     return generateFinalData(5)
