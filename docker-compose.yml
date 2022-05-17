@@ -34,7 +34,7 @@ services:
       - grafana:/var/lib/grafana
     
   scraping:
-    image: zachib/final_scraping_service
+    image: zachib/scraping_service_last:latest
     container_name: scraping-server
     restart: always
     depends_on:

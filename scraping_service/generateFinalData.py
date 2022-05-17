@@ -4,8 +4,8 @@ import pandas as pd
 
 
 # Generating a final dataframe contaning last telemetries with timestamps
-def generateFinalData(numOfValues):
-    dfURLs = generateURLDataFrame(numOfValues)
+def generateFinalData(limit):
+    dfURLs = generateURLDataFrame(limit)
     df = pd.DataFrame()
 
     for index in range(len(dfURLs)):
@@ -24,4 +24,4 @@ def generateFinalData(numOfValues):
 
 
 def generate():
-    return generateFinalData(5)
+    return generateFinalData(10)

@@ -8,10 +8,10 @@ def main():
         push_to_db()
         print("\n")
         print("--------------------------------------------------------------------------")
-        print("\t\t\tSleeping 10 minutes")
+        print("\t\t\tSleeping 1 hour")
         print("--------------------------------------------------------------------------")
         print("\n")
-        time.sleep(600)
+        time.sleep(3600)
 
 
 if __name__ == "__main__":

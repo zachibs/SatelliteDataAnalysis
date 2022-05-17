@@ -3,7 +3,7 @@
 
 # TODO need to write a function that takes a df and create Point objects from it
 
-from influxdb_client import InfluxDBClient, Point
+from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 import socket
 import pandas as pd
@@ -54,7 +54,7 @@ def push_to_db():
     stop = f"{datetime.now().date()}T23:59:00Z"
     delete_api.delete(start, stop, '_measurement="latest"', bucket="SATLLA-2B")
     write_api.write("SATLLA-2B", record=first_row, data_frame_measurement_name="latest",
-                    data_frame_tag_columns=["msg_index"])
+                    data_frame_tag_columns=["msg_type"])
 
     # creating seprate dataframes for each field
     battery_volts = data.drop(['local_address', 'sd_outbox', 'msg_type', 'msg_received',
