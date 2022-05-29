@@ -7,8 +7,7 @@ where everything is containerized as services using docker compose: first is inf
 
 **TODO List:**
 
-- TODO: figure out how to pull long beacons data too and push it to influxdb
-- TODO: change inside the push function, the way of generating the data to push. instead of from a csv file, use the generate method directly.
+- TODO: refactor the codebase(better variable names, cleaner code)
 - TODO: figure out how to create dashboard by code (import json model)
 - TODO: check prometheus python api
 - TODO: check self hosting on grafana
@@ -27,7 +26,7 @@ where everything is containerized as services using docker compose: first is inf
 5. state_plot_power_mA() --- gauge (-1000 0 500) (neg - usage - show as red, pos - charging - show as green)
 6. state_plot_temp() ------ 2 graph - ntc1 , ntc2 (over time)
 7. state_plot_gyro()
-8. tate_plot_mag()
+8. state_plot_mag()
 
 **Future TODO's:**
 

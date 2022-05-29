@@ -3,7 +3,7 @@ from decodeHexdump import decode
 import pandas as pd
 
 
-# Generating a final dataframe contaning last telemetries with timestamps
+# Generating a final dataframe containing last telemetries with timestamps
 def generateFinalData(limit):
     dfURLs = generateURLDataFrame(limit)
     df = pd.DataFrame()
