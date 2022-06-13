@@ -9,13 +9,6 @@ where everything is containerized as services using docker compose: first is inf
 
 - TODO: refactor the codebase(better variable names, cleaner code)
 - TODO: figure out how to create dashboard by code (import json model)
-- TODO: check prometheus python api
-- TODO: check self hosting on grafana
-- TODO: check csv plugin for grafana
-
-**TODO's To Consider:**
-
-- TODO: create the dataframe_to_points function (in debate if should)
 
 **Visualization in grafana should look like:**
 
@@ -31,7 +24,6 @@ where everything is containerized as services using docker compose: first is inf
 **Future TODO's:**
 
 - TODO : visualize the satellite location: using sgp4 - library for getting satellite location by two numbers
-- TODO : push the project to a web app in azure using an account with my ms mail
 
 **Settings up influxdb as a data source in grafana:**
 
