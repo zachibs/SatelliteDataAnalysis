@@ -1,4 +1,5 @@
 .vscode/
 generatedCSVs/
 __pycache__/
-test.py
+test*.py
+latest_data_backup/

@@ -36,7 +36,7 @@ services:
   scraping:
     image: zachib/scraping_service_last:latest
     container_name: scraping-server
-    restart: always
+    restart: "no"
     depends_on:
       - influxdb
       - grafana

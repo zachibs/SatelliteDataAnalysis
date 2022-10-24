@@ -11,6 +11,22 @@ from generateFinalData import generate
 from datetime import datetime
 
 
+def write_to_db_short(columns_list, column_to_write, data, write_api):
+    columns_list.remove(column_to_write)
+    data_without_column = data.drop(columns_list, axis=1, inplace=False)
+    columns_list.append(column_to_write)
+    write_api.write("SATLLA-2B", record=data_without_column,
+                    data_frame_measurement_name=column_to_write)
+
+
+def write_to_db_long(columns_list, column_to_write, long_data, write_api):
+    columns_list.remove(column_to_write)
+    data_only_column = long_data.drop(columns_list, axis=1, inplace=False)
+    columns_list.append(column_to_write)
+    write_api.write("SATLLA-2B", record=data_only_column,
+                    data_frame_measurement_name=column_to_write)
+
+
 def push_to_db():
     # Get local ip
 
@@ -31,9 +47,12 @@ def push_to_db():
     query_api = client.query_api()
     bucket_api = client.buckets_api()
 
-    # creating and deleting a new bucket
+    # Creating the SATLLA bucket if its not been created yet
+    try:
+        bucket_api.create_bucket(bucket_name="SATLLA-2B")
+    except:
+        pass
     # bucket_api.delete_bucket(bucket_api.find_bucket_by_name("SATLLA-2B"))
-    # bucket_api.create_bucket(bucket_name="SATLLA-2B")
 
     # generating the data
     generate()
@@ -49,14 +68,18 @@ def push_to_db():
     first_row.set_index("timestamp", inplace=True)
     data.set_index("timestamp", inplace=True)
 
-    # deleting former latest telemetry and writing the new latest
+    # deleting former latest telemetry (if exists) and writing the new latest
     start = "1970-01-01T00:00:00Z"
     stop = f"{datetime.now().date()}T23:59:00Z"
-    delete_api.delete(start, stop, '_measurement="latest"', bucket="SATLLA-2B")
+    try:
+        delete_api.delete(
+            start, stop, '_measurement="latest"', bucket="SATLLA-2B")
+    except:
+        pass
     write_api.write("SATLLA-2B", record=first_row, data_frame_measurement_name="latest",
                     data_frame_tag_columns=["msg_type"])
 
-    # creating separate dataframes for each field
+    # Writing the data
 
     columns_list = ["local_address", "sd_outbox", "msg_type", "msg_index", "battery_volts", "battery_current", "sns_ntc1",
                     "sns_ntc2", "destination", "msg_size", "msg_time", "msg_ack_req", "gps_month",
@@ -65,78 +88,18 @@ def push_to_db():
                     "sns_mz", "sns_bmp_temp_c", "battery_soc", "battery_health", "battery_full_capacity",
                     "battery_capacity", "battery_power", "sd_sent", "sd_rpi", "sd_files"]
 
-    columns_list.remove("battery_volts")
-    battery_volts = data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("battery_volts")
+    short_data_name_list = ["battery_volts",
+                            "battery_current", "sns_ntc1", "sns_ntc2"]
 
-    columns_list.remove("battery_current")
-    battery_current = data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("battery_current")
+    long_data_name_list = ["sns_bmp_temp_c", "sns_mx",
+                           "sns_my", "sns_mz", "sns_gx", "sns_gy", "sns_gz"]
 
-    columns_list.remove("sns_ntc1")
-    sns_ntc1 = data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_ntc1")
-
-    columns_list.remove("sns_ntc2")
-    sns_ntc2 = data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_ntc2")
+    for column in short_data_name_list:
+        write_to_db_short(columns_list, column, data, write_api)
 
     long_data = data.dropna(inplace=False)
 
-    columns_list.remove("sns_bmp_temp_c")
-    sns_bmp_temp_c = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_bmp_temp_c")
-
-    columns_list.remove("sns_mx")
-    sns_mx = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_mx")
-
-    columns_list.remove("sns_my")
-    sns_my = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_my")
-
-    columns_list.remove("sns_mz")
-    sns_mz = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_mz")
-
-    columns_list.remove("sns_gx")
-    sns_gx = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_gx")
-
-    columns_list.remove("sns_gy")
-    sns_gy = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_gy")
-
-    columns_list.remove("sns_gz")
-    sns_gz = long_data.drop(columns_list, axis=1, inplace=False)
-    columns_list.append("sns_gz")
-
-    # writing in separate measurements:
-    write_api.write("SATLLA-2B", record=battery_volts,
-                    data_frame_measurement_name="battery_volts")
-    write_api.write("SATLLA-2B", record=battery_current,
-                    data_frame_measurement_name="battery_current")
-    write_api.write("SATLLA-2B", record=sns_ntc1,
-                    data_frame_measurement_name="sns_ntc1")
-    write_api.write("SATLLA-2B", record=sns_ntc2,
-                    data_frame_measurement_name="sns_ntc2")
-    write_api.write("SATLLA-2B", record=sns_bmp_temp_c,
-                    data_frame_measurement_name="sns_bmp_temp_c")
-    write_api.write("SATLLA-2B", record=sns_mx,
-                    data_frame_measurement_name="sns_mx")
-    write_api.write("SATLLA-2B", record=sns_my,
-                    data_frame_measurement_name="sns_my")
-    write_api.write("SATLLA-2B", record=sns_mz,
-                    data_frame_measurement_name="sns_mz")
-    write_api.write("SATLLA-2B", record=sns_gx,
-                    data_frame_measurement_name="sns_gx")
-    write_api.write("SATLLA-2B", record=sns_gy,
-                    data_frame_measurement_name="sns_gy")
-    write_api.write("SATLLA-2B", record=sns_gz,
-                    data_frame_measurement_name="sns_gz")
-
-    # # Deprecated -------- Writing the data to the database
-    # write_api.write("dataframe", record=data, data_frame_measurement_name="continuos_data",
-    #                 data_frame_tag_columns=["msg_index"])
+    for column in long_data_name_list:
+        write_to_db_long(columns_list, column, long_data, write_api)
 
     client.close()

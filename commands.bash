@@ -33,3 +33,16 @@ docker-compose up -d
 # connect grafana to influxdb with the next link:
 # http://wiki.webperfect.ch/index.php?title=InfluxDB_2.x:_Error:_Bad_Request_(Grafana_and_InfluxQL)&oldid=2578
 # ------------------------------------------------------------------------------------------------
+
+
+# Used those links too:
+# https://stackoverflow.com/questions/33111835/how-to-set-up-grafana-so-that-no-password-is-necessary-to-view-dashboards
+# https://askubuntu.com/questions/256782/how-to-copy-paste-contents-in-the-vi-editor
+# https://docs.influxdata.com/influxdb/cloud/reference/cli/influx/backup/#works-with-influxdb-oss-2x
+
+# update the influx cli config:
+# influx config set -n satconfig -u http://ipaddress:8086
+
+# backup data:
+# Use backupScript.sh
+# move data to local: scp root@ipaddress:SATTLA-Data/influxDatabaseBackup/latest_backup/* .

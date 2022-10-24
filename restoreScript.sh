@@ -1,0 +1,1 @@
+influx restore --bucket SATLLA-2B --new-bucket SATLLA-2B .

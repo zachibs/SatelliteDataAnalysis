@@ -1,4 +1,4 @@
-# satellite_data_services
+# Satellite TinyGs Data Visualization
 
 ## Introduction:
 
@@ -8,6 +8,7 @@ where everything is containerized as services using docker compose: first is inf
 **TODO List:**
 
 - TODO: refactor the codebase(better variable names, cleaner code)
+- TODO: figure out how to create data source by code
 - TODO: figure out how to create dashboard by code (import json model)
 
 **Visualization in grafana should look like:**
