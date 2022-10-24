@@ -1,30 +1,22 @@
-# Satellite TinyGs Data Visualization
+# Satellite Data Visualization
 
-## Introduction:
-
-A project to scrape satellite data from tinygs and clean it, storing it in a pandas dataframe and then pushing it to an influxdb database. then visualizing the data in grafana.
+A project to scrape satellite data from tinygs and clean it, storing it in a pandas dataframe and then pushing it to an influxdb database. visualizing the data in grafana.
 where everything is containerized as services using docker compose: first is influxdb, second is grafana, and the third is a service for scraping and sending data to influxdb.
 
-**TODO List:**
+## How to setup:
 
-- TODO: refactor the codebase(better variable names, cleaner code)
-- TODO: figure out how to create data source by code
-- TODO: figure out how to create dashboard by code (import json model)
+**prerequisites:**
 
-**Visualization in grafana should look like:**
+1. docker
+2. docker-compose
 
-1. show last packet id
-2. last message index
-3. last message received
-4. state_plot_power_V() ----- gauge (0 - 4.2) min 3.2 (0 - 3.2 red, 3.2 - 3.79 orange, 3.8 - 4.2 green)
-5. state_plot_power_mA() --- gauge (-1000 0 500) (neg - usage - show as red, pos - charging - show as green)
-6. state_plot_temp() ------ 2 graph - ntc1 , ntc2 (over time)
-7. state_plot_gyro()
-8. state_plot_mag()
+**Setup:**
 
-**Future TODO's:**
-
-- TODO : visualize the satellite location: using sgp4 - library for getting satellite location by two numbers
+1. git clone https://github.com/zachibs/satellite_data_services
+2. docker-compose up
+3. go to http://ipaddress:3000
+4. set up influxdb as datasource as shown below:
+5. import the grafana-dashboard.json file in the dashboard import tab
 
 **Settings up influxdb as a data source in grafana:**
 
@@ -36,3 +28,10 @@ where everything is containerized as services using docker compose: first is inf
    - organization=DOCKER_INFLUXDB_INIT_ORG
    - token=DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
    - default Bucket=DOCKER_INFLUXDB_INIT_BUCKET
+
+## TODO's
+
+- TODO: refactor the codebase(better variable names, cleaner code)
+- TODO: figure out how to create data source by code
+- TODO: figure out how to create dashboard by code (import json model)
+- TODO : visualize the satellite location: using sgp4 - library for getting satellite location by two numbers
