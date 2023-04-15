@@ -11,10 +11,10 @@ RUN pip install -r requirements.txt
 WORKDIR /service
 
 # adding files to it
-COPY decodeHexdump.py /service
-COPY generateFinalData.py /service
-COPY generateUrlDf.py /service
-COPY pushToInfluxDB.py /service
+COPY decode_hexdump.py /service
+COPY generate_scapred_data_dataframe.py /service
+COPY generate_urls_dataframe.py /service
+COPY push_data_to_influxdb.py /service
 COPY start_service.py /service
 
 RUN mkdir generatedCSVs

@@ -7,7 +7,7 @@ from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 import socket
 import pandas as pd
-from generateFinalData import generate
+from generate_scapred_data_dataframe import generate
 from datetime import datetime
 
 

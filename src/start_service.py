@@ -1,5 +1,5 @@
-from generateFinalData import generate
-from pushToInfluxDB import push_to_db
+from generate_scapred_data_dataframe import generate
+from push_data_to_influxdb import push_to_db
 import time
 import random
 

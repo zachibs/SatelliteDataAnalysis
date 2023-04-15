@@ -1,5 +1,5 @@
-from generateUrlDf import generateURLDataFrame
-from decodeHexdump import decode
+from generate_urls_dataframe import generateURLDataFrame
+from decode_hexdump import decode
 import pandas as pd
 
 
