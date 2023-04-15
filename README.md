@@ -40,10 +40,3 @@ where everything is containerized as services using docker compose: first is inf
 > 3. Click on Query inspector
 > 4. Click on Refresh
 > 5. Click on Apply
-
-## TODO's
-
-- TODO: refactor the codebase(better variable names, cleaner code)
-- TODO: figure out how to create data source by code
-- TODO: figure out how to create dashboard by code (import json model)
-- TODO : visualize the satellite location: using sgp4 - library for getting satellite location by two numbers
