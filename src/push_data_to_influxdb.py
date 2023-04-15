@@ -50,8 +50,9 @@ def push_to_db():
     # Creating the SATLLA bucket if its not been created yet
     try:
         bucket_api.create_bucket(bucket_name="SATLLA-2B")
+        print("Created the 'SATLLA-2B' Bucket")
     except:
-        pass
+        print("Bucket Already Exist")
     # bucket_api.delete_bucket(bucket_api.find_bucket_by_name("SATLLA-2B"))
 
     # generating the data

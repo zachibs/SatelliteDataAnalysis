@@ -20,4 +20,4 @@ COPY start_service.py /service
 RUN mkdir generatedCSVs
 
 # default command to run when the container is executed
-CMD ["python3", "./start_service.py"]
+CMD ["python3", "-u", "./start_service.py"]
