@@ -13,10 +13,11 @@ where everything is containerized as services using docker compose: first is inf
 ## Setup:
 
 1. `git clone https://github.com/zachibs/SatelliteDataAnalysis.git`
-2. `cd scarping_service`
-2. `docker-compose up`
-3. Go to `http://LocalIPAddress:3000`
-4. Set up InfluxDB as a data source in Grafana:
+2. `cd SatelliteDataAnalysis`
+3. `cd scarping_service`
+4. `docker-compose up`
+5. Go to `http://LocalIPAddress:3000`
+6. Set up InfluxDB as a data source in Grafana:
 >  1. Go to Configuration -> Data sources -> Add data source
 >  2. Select InfluxDB
 >  3. Set query as flux
@@ -31,10 +32,10 @@ where everything is containerized as services using docker compose: first is inf
 >     - `default Bucket=DOCKER_INFLUXDB_INIT_BUCKET`
 >  10. Click on 'Save & test'
 
-6. Go to Dashboards -> Import
-7. Click on 'Upload dashboard JSON file'
-8. import the 'grafana-dashboard.json' file found in the repository directory
-9. Update each panel datasource to the correct one
+7. Go to Dashboards -> Import
+8. Click on 'Upload dashboard JSON file'
+9. import the 'grafana-dashboard.json' file found in the repository directory
+10. Update each panel datasource to the correct one
 > 1. Click on a panel -> Edit
 > 2. Select Data source to InfluxDB
 > 3. Click on Query inspector
